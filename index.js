@@ -270,6 +270,6 @@ function badDefense(data) {
     });
 }
 
-console.log(badDefense(fifaData));
+// console.log(badDefense(fifaData));
 
 /* If you still have time, use the space below to work on any stretch goals of your chosing as listed in the README file. */

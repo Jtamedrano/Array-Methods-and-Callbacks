@@ -6,26 +6,31 @@ const fifaData = require("./fifa.js").fifaData;
 
 // Task 1: Investigate the data above. Practice accessing data by console.log-ing the following pieces of data
 
-let fifa2014 = fifaData.find((e) => {
-  return e.Year === 2014 && e.Stage.toLowerCase() === "final";
-});
-// (a) Home Team name for 2014 world cup final
-console.log(fifa2014["Home Team Name"]);
-// (b) Away Team name for 2014 world cup final
-console.log(fifa2014["Away Team Name"]);
-// (c) Home Team goals for 2014 world cup final
-let homeGoals2014 = fifa2014["Home Team Goals"];
-console.log(homeGoals2014);
-// (d) Away Team goals for 2014 world cup final
-let awayGoals2014 = fifa2014["Away Team Goals"];
-console.log(awayGoals2014);
-// (e) Winner of 2014 world cup final
-let string = " won the 2014 world cup final";
-console.log(
-  homeGoals2014 > awayGoals2014
-    ? fifa2014["Home Team Name"] + string
-    : fifa2014["Away Team Name"] + string
-);
+// let fifa2014 = fifaData.find((e) => {
+//   return e.Year === 2014 && e.Stage.toLowerCase() === "final";
+// });
+
+// // (a) Home Team name for 2014 world cup final
+// console.log(fifa2014["Home Team Name"]);
+
+// // (b) Away Team name for 2014 world cup final
+// console.log(fifa2014["Away Team Name"]);
+
+// // (c) Home Team goals for 2014 world cup final
+// let homeGoals2014 = fifa2014["Home Team Goals"];
+// console.log(homeGoals2014);
+
+// // (d) Away Team goals for 2014 world cup final
+// let awayGoals2014 = fifa2014["Away Team Goals"];
+// console.log(awayGoals2014);
+
+// // (e) Winner of 2014 world cup final
+// let string = " won the 2014 world cup final";
+// console.log(
+//   homeGoals2014 > awayGoals2014
+//     ? fifa2014["Home Team Name"] + string
+//     : fifa2014["Away Team Name"] + string
+// );
 
 //  Task 2: Create a function called  getFinals that takes `data` as an argument and returns an array of objects with only finals data */
 
@@ -273,3 +278,67 @@ function badDefense(data) {
 // console.log(badDefense(fifaData));
 
 /* If you still have time, use the space below to work on any stretch goals of your chosing as listed in the README file. */
+
+// 1. Create a function that takes country initials as a parameter and returns their total number of World Cup appearances.
+
+function wcVisits(initials) {
+  let wcGames = getFinals(fifaData);
+
+  return wcGames.filter((el) => {
+    return (
+      el["Home Team Initials"] === initials ||
+      el["Away Team Initials"] === initials
+    );
+  }).length;
+}
+
+// console.log(wcVisits("FRG"));
+
+// Create a function that takes country initials as a parameter and determines how many goals that country has scored in World Cup games since 1930.
+
+function goalsFrom1930(initials) {
+  let wcGames = getFinals(fifaData);
+
+  if (allTeams.includes(initials.toUpperCase())) {
+    teamName = fifaData.find((e) => {
+      return e["Home Team Initials"] === initials.toUpperCase();
+    })["Home Team Name"];
+
+    let goals = wcGames
+      .filter((el) => {
+        return (
+          (el.Year >= 1930 &&
+            el["Home Team Initials"] === initials.toUpperCase()) ||
+          el["Away Team Initials"] === initials.toUpperCase()
+        );
+      })
+      .reduce((t, e) => {
+        if (e["Home Team Initials"] === initials.toUpperCase()) {
+          return t + e["Home Team Goals"];
+        } else {
+          return t + e["Away Team Goals"];
+        }
+      }, 0);
+    return `${teamName} has had a total of ${goals} goal(s) in the World Cup Finals since 1930 `;
+  } else {
+    return "Maybe you're looking for one of these teams.\n" + allTeams;
+  }
+}
+
+console.log(goalsFrom1930("MEX"));
+
+// Use `.map` to format country names into `<h1>` HTML headers.
+
+function h1FormatName(data) {
+  let nameSet = new Set(
+    data
+      .map((el) => {
+        return el["Home Team Name"];
+      })
+      .sort()
+  );
+  return Array.from(nameSet).map((el) => {
+    return `<h1>${el}</h1>`;
+  });
+}
+console.log(h1FormatName(fifaData));
